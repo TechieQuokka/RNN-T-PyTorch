@@ -1,0 +1,50 @@
+# Core Dependencies - Python 3.11.9 + RTX 3060 12GB (CUDA 12.1)
+torch==2.1.2
+torchaudio==2.1.2
+--extra-index-url https://download.pytorch.org/whl/cu121
+
+# Audio Processing
+demucs==4.0.1
+librosa==0.10.1
+soundfile==0.12.1
+pyloudnorm==0.1.1
+audioread==3.0.1
+
+# Voice Enhancement (Primary)
+# Note: resemble-enhance may need manual installation
+# pip install git+https://github.com/resemble-ai/resemble-enhance.git
+
+# Voice Enhancement (Fallback)
+voicefixer==0.1.3
+
+# Quality Metrics
+pesq==0.0.4
+pystoi==0.3.3
+
+# Utilities
+numpy==1.24.4
+scipy==1.11.4
+pydub==0.25.1
+tqdm==4.66.1
+numba==0.58.1
+
+# CLI and Configuration
+click==8.1.7
+pyyaml==6.0.1
+python-dotenv==1.0.0
+
+# Audio Format Support
+ffmpeg-python==0.2.0
+
+# Optional: Monitoring
+tensorboard==2.15.1
+
+# Optional: Web Interface
+gradio==4.8.0
+
+# Development
+pytest==7.4.3
+pytest-cov==4.1.0
+black==23.12.1
+flake8==6.1.0
+mypy==1.7.1

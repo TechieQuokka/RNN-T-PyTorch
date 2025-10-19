@@ -1,0 +1,70 @@
+# Vanish Configuration - RTX 3060 12GB Optimized
+# Ubuntu + Python 3.11.9 + CUDA 12.1
+
+# Device configuration
+device: cuda  # cuda or cpu
+target_sr: 44100  # Target sample rate (Hz)
+channels: 1  # Output channels (1=mono, 2=stereo)
+
+# Enhancement mode
+# Options: resemble, voicefixer, both
+enhancement_mode: resemble
+
+# Output settings
+output_format: wav
+output_bitdepth: 16  # 16, 24, or 32 bit
+
+# Save intermediate processing steps
+save_intermediate: false
+# intermediate_dir: ./intermediate  # Optional custom directory
+
+# Source Separation (Demucs v4)
+demucs:
+  model: htdemucs  # Hybrid Transformer Demucs
+  stems: 2  # vocals + background
+  device: cuda
+  shifts: 1  # Inference augmentation (0=fast, 1=balanced, 2=high quality)
+  overlap: 0.25  # Overlap between chunks (0.0-1.0)
+  segment: 10  # Segment length in seconds
+
+  # RTX 3060 12GB optimizations
+  batch_size: 1
+  num_workers: 4
+
+# Voice Enhancement (Resemble-Enhance)
+resemble:
+  model: resemble-enhance
+  device: cuda
+  denoiser_run_steps: 30  # Quality vs speed (15=fast, 30=balanced, 50=high)
+  enhance_run_steps: 30
+  solver: midpoint  # ODE solver
+  nfe: 64  # Number of function evaluations
+
+  # RTX 3060 12GB optimizations
+  chunk_size: 441000  # 10 seconds at 44.1kHz
+
+# Voice Enhancement Fallback (VoiceFixer)
+voicefixer:
+  model: voicefixer
+  mode: 2  # 0: 24kHz, 1: 44.1kHz, 2: auto
+  cuda: true
+
+# Post-Processing
+postprocess:
+  noise_gate_threshold: -40.0  # dB (lower = more aggressive)
+  target_lufs: -16.0  # Target loudness (LUFS)
+  highpass_cutoff: 80.0  # Hz (remove sub-vocal frequencies)
+  apply_deessing: true  # Reduce harsh sibilance
+  deess_frequency: 6000.0  # Hz
+  deess_threshold: -20.0  # dB
+
+# Quality Assessment
+quality:
+  calculate_snr: true  # Signal-to-Noise Ratio
+  calculate_pesq: true  # Perceptual Evaluation of Speech Quality
+  calculate_stoi: true  # Short-Time Objective Intelligibility
+
+  # Target metrics
+  target_snr: 20.0  # dB
+  target_pesq: 3.5  # 1.0-4.5 scale
+  target_stoi: 0.9  # 0.0-1.0 scale
