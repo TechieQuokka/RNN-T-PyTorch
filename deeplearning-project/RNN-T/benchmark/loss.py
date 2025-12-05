@@ -65,7 +65,7 @@ class RNNTLoss(nn.Module):
         log_probs = torch.nn.functional.log_softmax(logits, dim=-1)
 
         # Clamp to avoid log(0)
-        log_probs = torch.clamp(log_probs, min=torch.log(torch.tensor(self.clamp)))
+        log_probs = torch.clamp(log_probs, min=torch.log(torch.tensor(self.clamp, device=log_probs.device)))
 
         # Compute RNN-T loss
         loss = rnnt_loss(
